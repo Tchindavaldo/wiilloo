@@ -31,7 +31,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
         'Milliers d\'épreuves',
         'Tous niveaux scolaires',
         'Matières variées',
-        'Mise à jour régulière'
+        'Mise à jour régulière',
       ],
       'image': '📚',
     },
@@ -44,7 +44,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
         'Corrigés détaillés',
         'Explications claires',
         'Barèmes fournis',
-        'Solutions multiples'
+        'Solutions multiples',
       ],
       'image': '✅',
     },
@@ -57,7 +57,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
         'Paiements sécurisés',
         'Échéanciers flexibles',
         'Factures automatiques',
-        'Suivi des paiements'
+        'Suivi des paiements',
       ],
       'image': '💳',
     },
@@ -77,29 +77,23 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: const Interval(0.0, 0.7, curve: Curves.easeOut),
-    ));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.0, 0.7, curve: Curves.easeOut),
+      ),
+    );
 
-    _slideAnimation = Tween<double>(
-      begin: 30.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
-    ));
+    _slideAnimation = Tween<double>(begin: 30.0, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _fadeController,
+        curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
+      ),
+    );
 
-    _progressAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _progressController,
-      curve: Curves.easeInOut,
-    ));
+    _progressAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _progressController, curve: Curves.easeInOut),
+    );
 
     Future.delayed(const Duration(milliseconds: 300), () {
       _fadeController.forward();
@@ -184,9 +178,9 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
                 center: Alignment.topRight,
                 radius: 1.5,
                 colors: [
-                  Color(0xFF1E293B),
-                  Color(0xFF0A0E27),
-                  Color(0xFF000000),
+                  const Color.fromARGB(255, 255, 255, 255),
+                  // const Color.fromARGB(255, 255, 255, 255),
+                  const Color.fromARGB(255, 225, 234, 255),
                 ],
               ),
             ),
@@ -246,9 +240,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
 
   Widget _buildFloatingShapes() {
     return Positioned.fill(
-      child: CustomPaint(
-        painter: FloatingShapesPainter(),
-      ),
+      child: CustomPaint(painter: FloatingShapesPainter()),
     );
   }
 
@@ -276,11 +268,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
                 ),
               ],
             ),
-            child: const Icon(
-              Icons.school,
-              color: Colors.white,
-              size: 28,
-            ),
+            child: const Icon(Icons.school, color: Colors.white, size: 28),
           ),
 
           const SizedBox(height: 20),
@@ -291,7 +279,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
             style: TextStyle(
               fontSize: 36,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: Colors.black,
               letterSpacing: -1,
             ),
           ),
@@ -302,7 +290,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
             'L\'éducation redéfinie',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.black.withOpacity(0.7),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -323,7 +311,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
               decoration: BoxDecoration(
                 color: index <= _currentStep
                     ? _steps[_currentStep]['color']
-                    : Colors.white.withOpacity(0.2),
+                    : Colors.black.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -353,10 +341,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
               ),
             ),
             child: Center(
-              child: Text(
-                step['image'],
-                style: const TextStyle(fontSize: 48),
-              ),
+              child: Text(step['image'], style: const TextStyle(fontSize: 48)),
             ),
           ),
 
@@ -369,7 +354,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
             style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: Colors.black,
               height: 1.2,
             ),
           ),
@@ -382,7 +367,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.black.withOpacity(0.8),
               height: 1.4,
             ),
           ),
@@ -420,12 +405,9 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withOpacity(0.3),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: color.withOpacity(0.3),
-                width: 1,
-              ),
+              border: Border.all(color: color.withOpacity(0.3), width: 1),
               boxShadow: [
                 BoxShadow(
                   color: color.withOpacity(0.1),
@@ -444,11 +426,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
                     color: color,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(
-                    Icons.check,
-                    color: Colors.white,
-                    size: 18,
-                  ),
+                  child: const Icon(Icons.check, color: Colors.white, size: 18),
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -457,7 +435,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withOpacity(1),
                     height: 1.3,
                   ),
                 ),
@@ -480,11 +458,9 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
               child: Container(
                 height: 56,
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.2),
-                  ),
+                  border: Border.all(color: Colors.white.withOpacity(0.2)),
                 ),
                 child: TextButton(
                   onPressed: _previousStep,
@@ -545,8 +521,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
 class FloatingShapesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.fill;
+    final paint = Paint()..style = PaintingStyle.fill;
 
     // Floating circles
     for (int i = 0; i < 8; i++) {

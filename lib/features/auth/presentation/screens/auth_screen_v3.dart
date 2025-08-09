@@ -30,21 +30,14 @@ class _AuthScreenV3State extends State<AuthScreenV3>
       vsync: this,
     );
 
-    _slideAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+    );
 
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _fadeController,
-      curve: Curves.easeOut,
-    ));
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOut));
 
     Future.delayed(const Duration(milliseconds: 200), () {
       _slideController.forward();
@@ -71,13 +64,16 @@ class _AuthScreenV3State extends State<AuthScreenV3>
         transitionDuration: const Duration(milliseconds: 600),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(1.0, 0.0),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutCubic,
-            )),
+            position:
+                Tween<Offset>(
+                  begin: const Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
             child: child,
           );
         },
@@ -109,16 +105,10 @@ class _AuthScreenV3State extends State<AuthScreenV3>
                     child: Column(
                       children: [
                         // Header section
-                        Expanded(
-                          flex: 3,
-                          child: _buildHeaderSection(),
-                        ),
+                        Expanded(flex: 3, child: _buildHeaderSection()),
 
                         // Auth section
-                        Expanded(
-                          flex: 2,
-                          child: _buildAuthSection(),
-                        ),
+                        Expanded(flex: 2, child: _buildAuthSection()),
 
                         // Bottom section
                         _buildBottomSection(),
@@ -144,9 +134,9 @@ class _AuthScreenV3State extends State<AuthScreenV3>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                const Color(0xFF0F172A),
-                const Color(0xFF1E293B).withOpacity(0.8),
-                const Color(0xFF334155).withOpacity(0.3),
+                const Color.fromARGB(220, 255, 255, 255),
+                // const Color.fromARGB(255, 255, 255, 255),
+                const Color.fromARGB(255, 225, 234, 255),
               ],
             ),
           ),
@@ -203,7 +193,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
             style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.w300,
-              color: Colors.white,
+              color: Colors.black,
               height: 1.0,
               letterSpacing: -1.5,
             ),
@@ -230,7 +220,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.black.withOpacity(0.7),
               height: 1.5,
               letterSpacing: 0.2,
             ),
@@ -268,11 +258,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
             color: const Color(0xFF06B6D4).withOpacity(0.2),
             borderRadius: BorderRadius.circular(6),
           ),
-          child: Icon(
-            icon,
-            size: 12,
-            color: const Color(0xFF06B6D4),
-          ),
+          child: Icon(icon, size: 12, color: const Color(0xFF06B6D4)),
         ),
         const SizedBox(width: 8),
         Text(
@@ -280,7 +266,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.black.withOpacity(0.8),
             letterSpacing: 0.3,
           ),
         ),
@@ -302,7 +288,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Colors.white.withOpacity(0.9),
+                color: Colors.black.withOpacity(0.9),
                 letterSpacing: 0.3,
               ),
             ),
@@ -322,11 +308,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
 
           // Apple Auth Button
           _buildAuthButton(
-            icon: const Icon(
-              Icons.apple,
-              color: Colors.white,
-              size: 20,
-            ),
+            icon: const Icon(Icons.apple, color: Colors.white, size: 20),
             text: 'Continuer avec Apple',
             onTap: _navigateToLogin,
             isPrimary: false,
@@ -336,11 +318,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
 
           // WhatsApp Auth Button
           _buildAuthButton(
-            icon: const Icon(
-              Icons.chat,
-              color: Colors.white,
-              size: 20,
-            ),
+            icon: const Icon(Icons.chat, color: Colors.white, size: 20),
             text: 'Connexion via WhatsApp',
             onTap: _navigateToLogin,
             isPrimary: false,
@@ -390,16 +368,11 @@ class _AuthScreenV3State extends State<AuthScreenV3>
         width: double.infinity,
         height: 56,
         decoration: BoxDecoration(
-          color: isPrimary
-            ? Colors.white
-            : const Color(0xFF1E293B),
+          color: isPrimary ? Colors.white : const Color(0xFF1E293B),
           borderRadius: BorderRadius.circular(12),
           border: isPrimary
-            ? null
-            : Border.all(
-                color: const Color(0xFF334155),
-                width: 1,
-              ),
+              ? null
+              : Border.all(color: const Color(0xFF334155), width: 1),
           boxShadow: [
             if (isPrimary)
               BoxShadow(
@@ -419,9 +392,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: isPrimary
-                  ? const Color(0xFF1F2937)
-                  : Colors.white,
+                color: isPrimary ? const Color(0xFF1F2937) : Colors.white,
                 letterSpacing: 0.2,
               ),
             ),
@@ -443,7 +414,7 @@ class _AuthScreenV3State extends State<AuthScreenV3>
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w400,
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.5),
               height: 1.4,
             ),
           ),
@@ -493,24 +464,20 @@ class GeometricPatternPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = const Color(0xFF1E293B).withOpacity(0.1)
-      ..strokeWidth = 1
+      ..strokeWidth = 5
       ..style = PaintingStyle.stroke;
 
     // Draw subtle geometric grid
     for (double i = 0; i < size.width; i += 60) {
       for (double j = 0; j < size.height; j += 60) {
-        canvas.drawCircle(
-          Offset(i, j),
-          20,
-          paint,
-        );
+        canvas.drawCircle(Offset(i, j), 20, paint);
       }
     }
 
     // Draw diagonal lines
     final linePaint = Paint()
-      ..color = const Color(0xFF06B6D4).withOpacity(0.05)
-      ..strokeWidth = 2
+      ..color = const Color.fromARGB(150, 255, 255, 255)
+      ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
     for (double i = -size.height; i < size.width; i += 100) {
