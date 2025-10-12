@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wiilloo/features/auth/presentation/screens/auth_screen_v3.dart';
+import 'package:wiilloo/features/home/presentation/screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());

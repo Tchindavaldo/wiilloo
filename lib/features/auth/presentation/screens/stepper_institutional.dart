@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
-import '../../../auth/presentation/screens/design_selector.dart';
+import '../../../home/presentation/screens/home_screen.dart';
 
 class StepperInstitutional extends StatefulWidget {
   const StepperInstitutional({Key? key}) : super(key: key);
@@ -147,7 +147,7 @@ class _StepperInstitutionalState extends State<StepperInstitutional>
     HapticFeedback.lightImpact();
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, _) => const HomePage(),
+        pageBuilder: (context, animation, _) => const HomeScreen(),
         transitionDuration: const Duration(milliseconds: 600),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(
