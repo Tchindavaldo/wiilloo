@@ -17,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentNavIndex = 0;
   String _selectedCategory = 'Tous';
+  String _userName = 'Utilisateur';
+  String _userPhone = '+237 6X XX XX XX';
 
   final List<String> _categories = [
     'Tous',
@@ -250,6 +252,135 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _buildBody(),
       bottomNavigationBar: _buildBottomNavBar(),
     );
+  }
+
+  void _openEditProfile() {
+    final cs = Theme.of(context).colorScheme;
+    final primary = const Color(0xFF3B82F6);
+    final nameController = TextEditingController(text: _userName);
+    final phoneController = TextEditingController(text: _userPhone);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
+            top: 12,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Modifier le profil',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: primary,
+                  letterSpacing: -0.2,
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: nameController,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  labelText: 'Nom',
+                  prefixIcon: const Icon(Icons.person_rounded),
+                  filled: true,
+                  fillColor: primary.withOpacity(0.06),
+                  border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    borderSide: BorderSide(color: primary, width: 1.5),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  labelText: 'Numéro de téléphone',
+                  prefixIcon: const Icon(Icons.phone_rounded),
+                  filled: true,
+                  fillColor: primary.withOpacity(0.06),
+                  border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    borderSide: BorderSide(color: primary, width: 1.5),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: primary,
+                        side: BorderSide(color: primary),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Annuler'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: primary,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _userName = nameController.text.trim().isEmpty ? _userName : nameController.text.trim();
+                          _userPhone = phoneController.text.trim().isEmpty ? _userPhone : phoneController.text.trim();
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Enregistrer'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _confirmLogout() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Déconnexion'),
+          content: const Text('Voulez-vous vraiment vous déconnecter ?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Annuler'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Se déconnecter'),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      // Intégrer votre logique de déconnexion ici si nécessaire
+    }
   }
 
   Widget _buildBody() {
@@ -585,38 +716,142 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildProfileContent() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: [const Color(0xFF3B82F6), const Color(0xFF8B5CF6)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+    final cs = Theme.of(context).colorScheme;
+    final primary = const Color(0xFF3B82F6);
+    final onSurfaceSubtle = Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7);
+    return SafeArea(
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.04),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+                border: Border.all(color: primary.withOpacity(0.12)),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        colors: [primary, primary.withOpacity(0.7)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                    child: const Icon(Icons.person, size: 38, color: Colors.white),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _userName,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: cs.onSurface,
+                            letterSpacing: -0.2,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _userPhone,
+                          style: TextStyle(fontSize: 13, color: onSurfaceSubtle),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: Icon(Icons.edit_rounded, color: primary),
+                    onPressed: _openEditProfile,
+                    tooltip: 'Modifier',
+                  )
+                ],
               ),
             ),
-            child: const Icon(Icons.person, size: 50, color: Colors.white),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Mon Profil',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[600],
+  const SizedBox(height: 30),
+
+            // Settings list
+            _ProfileSection(
+              
+              children: [
+                _ProfileTile(
+                  icon: Icons.translate_rounded,
+                  title: 'Abonnement',
+                  subtitle: 'Consultez votre abonnement',
+                  onTap: () {},
+                ),
+                  _ProfileTile(
+                  icon: Icons.history_rounded,
+                  title: 'Historique',
+                  subtitle: 'Consultez votre historique de paiement',
+                  onTap: () {},
+                ),
+                
+                _ProfileTile(
+                  icon: Icons.translate_rounded,
+                  title: 'Langue',
+                  subtitle: 'Français',
+                  onTap: () {},
+                ),
+                _ProfileTile(
+                  icon: Icons.dark_mode_rounded,
+                  title: 'Apparence',
+                  subtitle: 'Système',
+                  onTap: () {},
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Gérez vos informations personnelles',
-            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-          ),
-        ],
+            const SizedBox(height: 12),
+
+   const SizedBox(width: 22),
+            _ProfileSection(
+             
+              children: [
+                _ProfileTile(
+                  icon: Icons.help_center_rounded,
+                  title: " A propos de l'application",
+                  onTap: () {},
+                ),
+                _ProfileTile(
+                  icon: Icons.mail_rounded,
+                  title: 'Aide & FAQ',
+                  onTap: () {},
+                ),
+                _ProfileTile(
+                  icon: Icons.logout_rounded,
+                  title: 'Se déconnecter',
+                  onTap: _confirmLogout,
+                  color: Colors.red,
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }
@@ -1168,6 +1403,190 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _ProfileActionButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      height: 80,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withOpacity(0.15)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color, size: 18),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileSection extends StatelessWidget {
+  final String? title;
+  final List<Widget> children;
+
+  const _ProfileSection({
+    this.title,
+    required this.children,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final primary = const Color(0xFF3B82F6);
+    final subtle = Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (title != null && title!.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              title!,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: subtle,
+                letterSpacing: 0.2,
+              ),
+            ),
+          ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: primary.withOpacity(0.12)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Column(children: children),
+        ),
+      ],
+    );
+  }
+}
+
+class _ProfileTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final VoidCallback? onTap;
+  final Color? color;
+
+  const _ProfileTile({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    this.onTap,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final primary = const Color(0xFF3B82F6);
+    final accent = color ?? primary;
+    final onSurface = Theme.of(context).textTheme.bodyLarge?.color;
+    final onSurfaceSubtle = Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7);
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: accent.withOpacity(0.10),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: accent, size: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: color ?? onSurface,
+                      letterSpacing: 0.1,
+                    ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle!,
+                      style: TextStyle(fontSize: 12, color: onSurfaceSubtle),
+                    ),
+                  ]
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(Icons.chevron_right_rounded, color: accent.withOpacity(0.8), size: 20),
+          ],
         ),
       ),
     );
