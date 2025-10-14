@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../auth/presentation/screens/design_selector.dart';
+import '../../../home/presentation/screens/home_screen.dart';
 
 class OnboardingSuccess extends StatefulWidget {
   const OnboardingSuccess({Key? key}) : super(key: key);
@@ -85,7 +85,7 @@ class _OnboardingSuccessState extends State<OnboardingSuccess>
     HapticFeedback.lightImpact();
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
-        pageBuilder: (context, animation, _) => const HomePage(),
+        pageBuilder: (context, animation, _) => const HomeScreen(),
         transitionDuration: const Duration(milliseconds: 800),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(

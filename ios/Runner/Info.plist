@@ -6,6 +6,10 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Wiilloo</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+<string>Nous avons besoin d'accéder à votre galerie pour la photo de profil.</string>
+<key>NSCameraUsageDescription</key>
+<string>Nous avons besoin de la caméra pour la photo de profil.</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
