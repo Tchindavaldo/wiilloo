@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:wiilloo/features/profile/edit_profile_screen.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -93,107 +94,30 @@ class _ProfileContentState extends State<ProfileContent> {
     );
   }
 
-  void _openEditProfile() {
-    final primary = const Color(0xFF3B82F6);
-    final nameController = TextEditingController(text: _userName);
-    final phoneController = TextEditingController(text: _userPhone);
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+  Future<void> _openEditProfile() {
+    return Navigator.push<Map<String, dynamic>?>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EditProfileScreen(
+          name: _userName,
+          phone: _userPhone,
+          avatar: _avatarFile,
+        ),
       ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
-            top: 12,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Modifier le profil',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: primary,
-                  letterSpacing: -0.2,
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: nameController,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  labelText: 'Nom',
-                  prefixIcon: const Icon(Icons.person_rounded),
-                  filled: true,
-                  fillColor: primary.withOpacity(0.06),
-                  border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(color: primary, width: 1.5),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: 'Numéro de téléphone',
-                  prefixIcon: const Icon(Icons.phone_rounded),
-                  filled: true,
-                  fillColor: primary.withOpacity(0.06),
-                  border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(color: primary, width: 1.5),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: primary,
-                        side: BorderSide(color: primary),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Annuler'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: primary,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _userName = nameController.text.trim().isEmpty ? _userName : nameController.text.trim();
-                          _userPhone = phoneController.text.trim().isEmpty ? _userPhone : phoneController.text.trim();
-                        });
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Enregistrer'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    ).then((result) {
+      if (result == null) return;
+      setState(() {
+        if (result['name'] is String && (result['name'] as String).trim().isNotEmpty) {
+          _userName = (result['name'] as String).trim();
+        }
+        if (result['phone'] is String && (result['phone'] as String).trim().isNotEmpty) {
+          _userPhone = (result['phone'] as String).trim();
+        }
+        if (result['avatarPath'] is String) {
+          _avatarFile = File(result['avatarPath'] as String);
+        }
+      });
+    });
   }
 
   Future<void> _confirmLogout() async {
@@ -246,7 +170,6 @@ class _ProfileContentState extends State<ProfileContent> {
   @override
   Widget build(BuildContext context) {
     final primary = const Color(0xFF3B82F6);
-    final onSurfaceSubtle = Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7);
     return SafeArea(
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -293,30 +216,7 @@ class _ProfileContentState extends State<ProfileContent> {
                               : const Icon(Icons.person, size: 38, color: Colors.white),
                         ),
                       ),
-                      Positioned(
-                        right: -2,
-                        bottom: -2,
-                        child: GestureDetector(
-                          onTap: _changeAvatar,
-                          child: Container(
-                            width: 26,
-                            height: 26,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: primary.withOpacity(0.3)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.06),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Icon(Icons.camera_alt_rounded, size: 14, color: primary),
-                          ),
-                        ),
-                      ),
+
                     ],
                   ),
                   const SizedBox(width: 16),
