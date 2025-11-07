@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:wiilloo/core/config/environment_config.dart';
 import 'package:wiilloo/features/auth/presentation/screens/auth_screen_v3.dart';
 import 'package:wiilloo/features/home/presentation/screens/home_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize environment configuration
+  // Set isProduction to true for production builds
+  await EnvironmentConfig.initialize(isProduction: false);
+  
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +30,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthScreenV3(),
+      // Switch between AuthScreenV3 and HomeScreen for testing
+      home: const HomeScreen(),
+      // home: const AuthScreenV3(),
     );
   }
 }

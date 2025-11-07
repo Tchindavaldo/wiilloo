@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/home_header.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/auto_slide_cards.dart';
-import '../widgets/manual_slide_cards.dart';
-import '../widgets/epreuve_card_section.dart';
-import '../widgets/featured_epreuve_card.dart';
-import '../widgets/compact_epreuve_card.dart';
+import '../widgets/design_1_card.dart';
+import '../widgets/design_2_card.dart';
+import '../widgets/design_3_card.dart';
+import '../providers/epreuve_providers.dart';
+import '../../data/adapters/epreuve_data_adapter.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoadingTriggered = false; // Flag pour éviter les requêtes multiples
   int _currentNavIndex = 0;
   String _selectedCategory = 'Tous';
 
@@ -244,6 +248,60 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    // Charger les données initiales du backend
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(epreuveNotifierProvider.notifier)
+          .loadEpreuves(
+            groupBy: 'schoolName',
+            itemsPerGroup: 4,
+            groupsLimit: 4,
+          );
+    });
+
+    // Configuration de l'infinite scroll
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    // Vérifier si on est complètement en bas (100%)
+    final isAtBottom = _scrollController.position.pixels >= 
+        _scrollController.position.maxScrollExtent;
+    
+    // Vérifier si on est remonté suffisamment (en dessous de 90%)
+    final hasScrolledUp = _scrollController.position.pixels < 
+        _scrollController.position.maxScrollExtent * 0.9;
+    
+    if (isAtBottom) {
+      final state = ref.read(epreuveNotifierProvider);
+      final canLoadMore = ref.read(canLoadMoreProvider);
+      
+      // Déclencher UNE SEULE FOIS quand on atteint le bas
+      if (canLoadMore && !state.isLoadingMore && !_isLoadingTriggered) {
+        _isLoadingTriggered = true; // Bloquer jusqu'à ce qu'on remonte
+        
+        ref.read(epreuveNotifierProvider.notifier).loadMoreEpreuves(
+          groupBy: 'schoolName',
+          itemsPerGroup: 4,
+          groupsLimit: 4,
+        );
+      }
+    } else if (hasScrolledUp) {
+      // Réinitialiser le flag seulement si on remonte en dessous de 90%
+      _isLoadingTriggered = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -268,227 +326,531 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHomeContent() {
-    return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
-      slivers: [
-        // Header avec recherche, notifications et avatar
-        SliverToBoxAdapter(
-          child: HomeHeader(
-            onSearchChanged: (value) {
-              // Handle search
-            },
-            onNotificationTap: () {
-              // Handle notification tap
-            },
-            onProfileTap: () {
-              setState(() {
-                _currentNavIndex = 4;
-              });
-            },
-          ),
-        ),
+    final state = ref.watch(epreuveNotifierProvider);
+    final isInitialLoading = ref.watch(isInitialLoadingProvider);
+    final isLoadingMore = ref.watch(isLoadingMoreProvider);
 
-        // Category chips
-        SliverToBoxAdapter(
-          child: CategoryChips(
-            categories: _categories,
-            selectedCategory: _selectedCategory,
-            onCategorySelected: (category) {
-              setState(() {
-                _selectedCategory = category;
-              });
-            },
-          ),
-        ),
+    // Afficher le loader pendant le chargement initial
+    if (isInitialLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-        // Auto-sliding cards (Featured)
-        SliverToBoxAdapter(child: AutoSlideCards(items: _appFeatures)),
-
-        // Section title - Épreuves populaires
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Unoversite des Montagnes',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Voir tout',
-                    style: TextStyle(
-                      color: Color(0xFF3B82F6),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
+    // Afficher une erreur si nécessaire
+    if (state.error != null && state.groups.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            const SizedBox(height: 16),
+            Text('Erreur: ${state.error}'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                ref.read(epreuveNotifierProvider.notifier).refreshEpreuves();
+              },
+              child: const Text('Réessayer'),
             ),
-          ),
+          ],
         ),
+      );
+    }
 
-        // Horizontal scrolling cards - Popular (Style 1)
-        SliverToBoxAdapter(
-          child: EpreuveCardSection(
-            items: _popularEpreuves,
-            onCardTap: (item) {
-              // Handle card tap
-              _showEpreuveDetails(item);
-            },
-          ),
-        ),
+    // Convertir les groupes du backend en format pour les widgets
+    final backendGroups = state.groups;
 
-        // Section title - Nouvelles épreuves
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Unoversite de Dschang',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Voir tout',
-                    style: TextStyle(
-                      color: Color(0xFF3B82F6),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // Horizontal scrolling cards - New (Style 2 - Featured style)
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 220,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: _newEpreuves.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: FeaturedEpreuveCard(
-                    item: _newEpreuves[index],
-                    onTap: () => _showEpreuveDetails(_newEpreuves[index]),
-                  ),
-                );
+    return RefreshIndicator(
+      onRefresh: () async {
+        await ref.read(epreuveNotifierProvider.notifier).refreshEpreuves();
+      },
+      child: CustomScrollView(
+        controller: _scrollController,
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          // Header avec recherche, notifications et avatar
+          SliverToBoxAdapter(
+            child: HomeHeader(
+              onSearchChanged: (value) {
+                // Handle search
+              },
+              onNotificationTap: () {
+                // Handle notification tap
+              },
+              onProfileTap: () {
+                setState(() {
+                  _currentNavIndex = 4;
+                });
               },
             ),
           ),
-        ),
 
-        // Section title - Recommandations
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Unoversite de Yde 1',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Voir tout',
-                    style: TextStyle(
-                      color: Color(0xFF3B82F6),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        // Horizontal scrolling cards - Recommended (Style 3 - Compact)
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 160,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemCount: _recommendedEpreuves.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: CompactEpreuveCard(
-                    item: _recommendedEpreuves[index],
-                    onTap: () =>
-                        _showEpreuveDetails(_recommendedEpreuves[index]),
-                  ),
-                );
+          // Category chips
+          SliverToBoxAdapter(
+            child: CategoryChips(
+              categories: _categories,
+              selectedCategory: _selectedCategory,
+              onCategorySelected: (category) {
+                setState(() {
+                  _selectedCategory = category;
+                });
               },
             ),
           ),
-        ),
 
-        // Section title - Explorez plus
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'College Jean Tabi',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Voir tout',
-                    style: TextStyle(
-                      color: Color(0xFF3B82F6),
-                      fontWeight: FontWeight.w600,
+          // Auto-sliding cards (Featured) - Toujours avec _appFeatures (ne pas toucher)
+          SliverToBoxAdapter(child: AutoSlideCards(items: _appFeatures)),
+
+          // Sections backend - avec designs originaux (ne pas modifier les designs)
+          ...backendGroups.asMap().entries.map((entry) {
+            final index = entry.key;
+            final group = entry.value;
+            final epreuvesData = EpreuveDataAdapter.epreuvesToMapList(
+              group.epreuves,
+            );
+
+            if (epreuvesData.isEmpty) {
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            }
+
+            // Utiliser le design original selon l'index - Alternance cyclique
+            Widget sectionWidget;
+            // Décaler de +1 pour éviter doublon avec AutoSlideCards
+            final designIndex = (index + 1) % 4; // Cycle entre 1, 2, 3, 0
+
+            if (designIndex == 0) {
+              // Design 0 - Carte simple avec header coloré
+              sectionWidget = Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          group.groupKey,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1E293B),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Voir tout',
+                            style: TextStyle(
+                              color: Color(0xFF3B82F6),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 280,
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification scrollInfo) {
+                        if (scrollInfo is ScrollEndNotification) {
+                          final metrics = scrollInfo.metrics;
+                          // Trigger ONLY at the EXACT end (100%) and only if not already loading
+                          if (metrics.pixels >= metrics.maxScrollExtent &&
+                              group.hasMoreHorizontal &&
+                              !group.isLoadingHorizontal) {
+                            ref.read(epreuveNotifierProvider.notifier).loadMoreHorizontal(
+                              groupId: group.id,
+                              groupBy: 'schoolName',
+                              itemsPerGroup: 4,
+                            );
+                          }
+                        }
+                        return false;
+                      },
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: epreuvesData.length + (group.hasMoreHorizontal || group.isLoadingHorizontal ? 1 : 0),
+                        itemBuilder: (context, idx) {
+                          if (idx < epreuvesData.length) {
+                            final item = epreuvesData[idx];
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 16),
+                              child: GestureDetector(
+                                onTap: () => _showEpreuveDetails(item),
+                                child: Container(
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.06),
+                                        blurRadius: 16,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: 120,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(20),
+                                            topRight: Radius.circular(20),
+                                          ),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            // Image colorée
+                                            ClipRRect(
+                                              borderRadius: const BorderRadius.only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20),
+                                              ),
+                                              child: Container(
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                color: item['color'] ?? const Color(0xFF3B82F6),
+                                                child: Icon(
+                                                  Icons.description_rounded,
+                                                  size: 50,
+                                                  color: Colors.white.withOpacity(0.4),
+                                                ),
+                                              ),
+                                            ),
+                                            
+                                            // Overlay gradient (COMME DESIGN 2)
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: const BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight: Radius.circular(20),
+                                                ),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    Colors.black.withOpacity(0.5),
+                                                    Colors.black.withOpacity(0.2),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                item['title'] ?? '',
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF1E293B),
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const Spacer(),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Icon(Icons.download_rounded,
+                                                          size: 14, color: Colors.grey[500]),
+                                                      const SizedBox(width: 4),
+                                                      Text(
+                                                        '${item['downloads'] ?? 0}',
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.grey[600],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          // Loader à la fin
+                          if (group.isLoadingHorizontal) {
+                            return Container(
+                              width: 200,
+                              margin: const EdgeInsets.only(right: 16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3B82F6)),
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else if (designIndex == 1) {
+              // Design 1 - FeaturedEpreuveCard
+              sectionWidget = Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          group.groupKey,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1E293B),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Voir tout',
+                            style: TextStyle(
+                              color: Color(0xFF3B82F6),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 220,
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification scrollInfo) {
+                        if (scrollInfo is ScrollEndNotification) {
+                          final metrics = scrollInfo.metrics;
+                          // Trigger ONLY at the EXACT end (100%) and only if not already loading
+                          if (metrics.pixels >= metrics.maxScrollExtent &&
+                              group.hasMoreHorizontal &&
+                              !group.isLoadingHorizontal) {
+                            ref.read(epreuveNotifierProvider.notifier).loadMoreHorizontal(
+                              groupId: group.id,
+                              groupBy: 'schoolName',
+                              itemsPerGroup: 4,
+                            );
+                          }
+                        }
+                        return false;
+                      },
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: epreuvesData.length + (group.hasMoreHorizontal || group.isLoadingHorizontal ? 1 : 0),
+                        itemBuilder: (context, idx) {
+                          if (idx < epreuvesData.length) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 16),
+                              child: Design1Card(
+                                item: epreuvesData[idx],
+                                onTap: () => _showEpreuveDetails(epreuvesData[idx]),
+                              ),
+                            );
+                          }
+                          // Loader à la fin
+                          if (group.isLoadingHorizontal) {
+                            return Container(
+                              width: 180,
+                              margin: const EdgeInsets.only(right: 16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3B82F6)),
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else if (designIndex == 2) {
+              // Design 2 - CompactEpreuveCard
+              sectionWidget = Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          group.groupKey,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1E293B),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Voir tout',
+                            style: TextStyle(
+                              color: Color(0xFF3B82F6),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 160,
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification scrollInfo) {
+                        if (scrollInfo is ScrollEndNotification) {
+                          final metrics = scrollInfo.metrics;
+                          // Trigger ONLY at the EXACT end (100%) and only if not already loading
+                          if (metrics.pixels >= metrics.maxScrollExtent &&
+                              group.hasMoreHorizontal &&
+                              !group.isLoadingHorizontal) {
+                            ref.read(epreuveNotifierProvider.notifier).loadMoreHorizontal(
+                              groupId: group.id,
+                              groupBy: 'schoolName',
+                              itemsPerGroup: 4,
+                            );
+                          }
+                        }
+                        return false;
+                      },
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: epreuvesData.length + (group.hasMoreHorizontal || group.isLoadingHorizontal ? 1 : 0),
+                        itemBuilder: (context, idx) {
+                          if (idx < epreuvesData.length) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: Design2Card(
+                                item: epreuvesData[idx],
+                                onTap: () => _showEpreuveDetails(epreuvesData[idx]),
+                              ),
+                            );
+                          }
+                          // Loader à la fin
+                          if (group.isLoadingHorizontal) {
+                            return Container(
+                              width: 140,
+                              margin: const EdgeInsets.only(right: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: const Center(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3B82F6)),
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              // Design 3 - ManualSlideCards
+              sectionWidget = Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          group.groupKey,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1E293B),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Voir tout',
+                            style: TextStyle(
+                              color: Color(0xFF3B82F6),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Design3Card(
+                    items: epreuvesData,
+                    onCardTap: (item) => _showEpreuveDetails(item),
+                  ),
+                ],
+              );
+            }
+
+            return SliverToBoxAdapter(child: sectionWidget);
+          }).toList(),
+
+          // Indicateur de chargement pour l'infinite scroll
+          if (isLoadingMore)
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(top: 40.0, bottom: 20.0),
+                child: Center(child: CircularProgressIndicator()),
+              ),
             ),
-          ),
-        ),
 
-        // Manual slide carousel - identique au premier mais manuel
-        SliverToBoxAdapter(
-          child: ManualSlideCards(
-            items: _popularEpreuves,
-            onCardTap: (item) => _showEpreuveDetails(item),
-          ),
-        ),
+          // Message de fin si plus de données
+          if (!state.hasMore && backendGroups.isNotEmpty)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                  child: Text(
+                    'Vous avez atteint la fin de la liste',
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                  ),
+                ),
+              ),
+            ),
 
-        // Bottom spacing
-        const SliverToBoxAdapter(child: SizedBox(height: 80)),
-      ],
+          // Bottom spacing
+          const SliverToBoxAdapter(child: SizedBox(height: 80)),
+        ],
+      ),
     );
   }
 
@@ -978,12 +1340,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      'Corrigé disponible',
+                                      'Design 0',
                                       style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF10B981),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1E293B),
                                       ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 2),
                                     Text(

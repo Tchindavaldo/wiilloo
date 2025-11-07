@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class FeaturedEpreuveCard extends StatelessWidget {
+class Design1Card extends StatelessWidget {
   final Map<String, dynamic> item;
   final VoidCallback onTap;
 
-  const FeaturedEpreuveCard({Key? key, required this.item, required this.onTap})
+  const Design1Card({Key? key, required this.item, required this.onTap})
     : super(key: key);
 
   @override

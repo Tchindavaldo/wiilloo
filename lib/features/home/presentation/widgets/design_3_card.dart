@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ManualSlideCards extends StatefulWidget {
+class Design3Card extends StatefulWidget {
   final List<Map<String, dynamic>> items;
   final Function(Map<String, dynamic>)? onCardTap;
 
-  const ManualSlideCards({Key? key, required this.items, this.onCardTap})
+  const Design3Card({Key? key, required this.items, this.onCardTap})
     : super(key: key);
 
   @override
-  State<ManualSlideCards> createState() => _ManualSlideCardsState();
+  State<Design3Card> createState() => _Design3CardState();
 }
 
-class _ManualSlideCardsState extends State<ManualSlideCards> {
+class _Design3CardState extends State<Design3Card> {
   late PageController _pageController;
   int _currentPage = 0;
 
