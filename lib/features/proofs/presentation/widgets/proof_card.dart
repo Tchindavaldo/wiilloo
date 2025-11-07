@@ -28,7 +28,6 @@ class ProofCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
-      constraints: const BoxConstraints(minHeight: 10, maxHeight: 90),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -36,7 +35,6 @@ class ProofCard extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +88,7 @@ class ProofCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 5),
               // Title
               Text(
                 title,
@@ -114,7 +112,7 @@ class ProofCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 7),
           // Bottom row: Comments + Deadline
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
