@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/home_header.dart';
 import '../widgets/category_chips.dart';
@@ -9,14 +10,14 @@ import '../widgets/design_3_card.dart';
 import '../providers/epreuve_providers.dart';
 import '../../data/adapters/epreuve_data_adapter.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomePage extends ConsumerStatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomePageState extends ConsumerState<HomePage> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingTriggered = false; // Flag pour éviter les requêtes multiples
   String _selectedCategory = 'Tous';
@@ -346,24 +347,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // Convertir les groupes du backend en format pour les widgets
     final backendGroups = state.groups;
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        await ref.read(epreuveNotifierProvider.notifier).refreshEpreuves();
-      },
-      child: CustomScrollView(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Color(0xFF1E3A8A),
+        statusBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          await ref.read(epreuveNotifierProvider.notifier).refreshEpreuves();
+        },
+        child: CustomScrollView(
         controller: _scrollController,
         physics: const BouncingScrollPhysics(),
         slivers: [
-          // Header avec recherche, notifications et avatar
-          SliverToBoxAdapter(
-            child: HomeHeader(
-              onSearchChanged: (value) {
-                // Handle search
-              },
-              onNotificationTap: () {
-                // Handle notification tap
-              },
-              onProfileTap: () {},
+          // Sticky Header
+          SliverAppBar(
+            pinned: true,
+            floating: false,
+            backgroundColor: const Color(0xFF1E3A8A),
+            elevation: 0,
+            toolbarHeight: 120,
+            automaticallyImplyLeading: false,
+            flexibleSpace: SafeArea(
+              child: HomeHeader(
+                onSearchChanged: (value) {
+                  // Handle search
+                },
+                onNotificationTap: () {
+                  // Handle notification tap
+                },
+                onProfileTap: () {},
+              ),
             ),
           ),
 
@@ -833,6 +849,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           // Bottom spacing
           const SliverToBoxAdapter(child: SizedBox(height: 80)),
         ],
+        ),
       ),
     );
   }

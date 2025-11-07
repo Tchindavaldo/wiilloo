@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Alerts &amp; Updates</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1173d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-10 flex flex-col bg-background-light dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center p-4 justify-between border-b border-gray-200 dark:border-gray-800">
+<div class="flex size-10 shrink-0 items-center justify-start text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</div>
+<h1 class="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center text-gray-900 dark:text-gray-100">Alerts &amp; Updates</h1>
+<div class="flex size-10 shrink-0 items-center justify-end text-primary dark:text-primary/90">
+<span class="material-symbols-outlined text-2xl">done_all</span>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-3 p-4">
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary pl-4 pr-4">
+<p class="text-white text-sm font-medium leading-normal">All</p>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-gray-200 dark:bg-gray-700 pl-4 pr-4">
+<p class="text-gray-800 dark:text-gray-200 text-sm font-medium leading-normal">Unread</p>
+</button>
+</div>
+</header>
+<!-- Main Content: Notifications List -->
+<main class="flex-grow pb-24">
+<!-- New Comment Notification -->
+<div class="flex items-start gap-4 bg-white dark:bg-gray-800/50 px-4 py-4 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-start gap-4 w-full">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="User avatar for Jane Doe" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCMFUFc2Rq1eziEewHjU-qgA22N8srSs_GF1yBKmVZyu56lWYjBYUiAjiO1_ApEhGb7vIsUEJUe1Pr0PeTw8_2ULiOZ2VW6866i6By9fXxb790Q9DcjAk3DTO7oTWm69Y5Po0Trsb1hRhX3oThkfggFaWmOH4EPIVg5qLgO406leu5TebtyRpPKpwkUvfQkqwUqiGdu8UOISOpdPCLaIqBgjL9aC6In_1RM7zg0W9zr0PNNt2NHKDWPbpC6IDLuTnGVbnV13uUGM5AS");'></div>
+<div class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-gray-700 border-2 border-white dark:border-gray-700">
+<span class="material-symbols-outlined text-sm text-blue-500">chat_bubble</span>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal">Jane Doe commented on 'Brochure_V3.pdf'</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal italic mt-1">"Can we make the logo slightly bigger on the cover page?"</p>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">5m</p>
+<div class="mt-2 h-2.5 w-2.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<!-- Mention Notification -->
+<div class="flex items-start gap-4 bg-white dark:bg-gray-800/50 px-4 py-4 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-start gap-4 w-full">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12" data-alt="User avatar for John Smith" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBcc_eeMfda4A0ENb11-MmhHFr-hVdBpIFXBHl8teLQJMgEM5NZkxMhyGeqZ_yyobk61-_M9fyjyLrNVJq5hxAdiBUK9K5p8N3gUgRCXzpqczQY8wGSWPn5R7z67mhQfH8HqBxRaTwJWCR7i7BXZ-5CcCjjZ3L4V6MsI6jmhvIhsCTHcWMDgpaJdJS86BVRgh5yO_gzhUnEKSpwQ2R0mlwqlfId7qDC_-ui8ck8wSDr-ey8UUPodjBhO2_I8BWx-4bCD8ru0JzJHde_");'></div>
+<div class="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-white dark:bg-gray-700 border-2 border-white dark:border-gray-700">
+<span class="material-symbols-outlined text-sm text-purple-500">alternate_email</span>
+</div>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal">John Smith mentioned you in 'Website_Mockup.fig'</p>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">30m</p>
+<div class="mt-2 h-2.5 w-2.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<!-- Status Change Notification -->
+<div class="flex items-start gap-4 bg-white dark:bg-gray-800/50 px-4 py-4 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-start gap-4 w-full">
+<div class="flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900/50 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl text-green-600 dark:text-green-400">task_alt</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal line-clamp-2">'Brochure_V3.pdf' was updated to 'Approved'</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Status Change</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">2h</p>
+</div>
+</div>
+<!-- Deadline Approaching Notification -->
+<div class="flex items-start gap-4 bg-orange-50 dark:bg-orange-900/30 px-4 py-4 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-start gap-4 w-full">
+<div class="flex items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/50 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl text-orange-600 dark:text-orange-400">hourglass_top</span>
+</div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal">Deadline approaching for 'Annual_Report.pdf'</p>
+<p class="text-orange-600 dark:text-orange-400 text-sm font-semibold leading-normal mt-1">Due in 2 days</p>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">1d</p>
+<div class="mt-2 h-2.5 w-2.5 rounded-full bg-primary"></div>
+</div>
+</div>
+<!-- New Assignment Notification -->
+<div class="flex items-start gap-4 bg-white dark:bg-gray-800/50 px-4 py-4 justify-between border-b border-gray-100 dark:border-gray-800">
+<div class="flex items-start gap-4 w-full">
+<div class="flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/50 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl text-blue-600 dark:text-blue-400">person_add</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-gray-800 dark:text-gray-200 text-base font-medium leading-normal line-clamp-2">You've been added to review 'Q3_Marketing_Plan.docx'</p>
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">New Assignment</p>
+</div>
+</div>
+<div class="shrink-0">
+<p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal">3d</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-10 bg-white dark:bg-background-dark border-t border-gray-200 dark:border-gray-800">
+<div class="flex h-16 justify-around items-center">
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 w-full" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-xs mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 w-full" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-xs mt-1">Proofs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary/90 w-full" href="#">
+<div class="relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">4</span>
+</div>
+<span class="text-xs font-semibold mt-1">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 w-full" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-xs mt-1">Settings</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

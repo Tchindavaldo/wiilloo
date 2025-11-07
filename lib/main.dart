@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wiilloo/core/config/environment_config.dart';
-import 'package:wiilloo/features/auth/presentation/screens/auth_screen_v3.dart';
-import 'package:wiilloo/features/home/presentation/screens/home_screen.dart';
+// import 'package:wiilloo/features/auth/presentation/screens/auth_screen_v3.dart';
+import 'package:wiilloo/features/navigation/presentation/screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // Switch between AuthScreenV3 and HomeScreen for testing
-      home: const HomeScreen(),
+      // Switch between AuthScreenV3 and MainScreen for testing
+      home: const MainScreen(),
       // home: const AuthScreenV3(),
     );
   }

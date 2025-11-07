@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1173d4",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "card-light": "#ffffff",
+              "card-dark": "#1e293b",
+              "icon-light": "#3f4f5f",
+              "icon-dark": "#94a3b8",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;font-size: 24px;
+        }
+    </style>
+<style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative mx-auto flex h-auto min-h-screen w-full max-w-lg flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<header class="sticky top-0 z-10 flex h-16 items-center border-b border-gray-200/80 dark:border-gray-800/80 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm px-4">
+<button class="flex size-10 shrink-0 items-center justify-center text-gray-800 dark:text-gray-200">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="flex-1 text-center text-lg font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+<div class="size-10 shrink-0"></div>
+</header>
+<main class="flex-1 p-4 pb-8">
+<div class="mb-6">
+<div class="flex w-full items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-16 w-16 shrink-0" data-alt="User's profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBGDGrwcecH6ISOnA_aus4wQxWat-YtUJFrN2_dk7UHJFIxDl2HztsdME6TBvUS2x6hvxTPC1beUYHekjyoz2MinHmJfqLFqiw52sT6BKJemxjiWPjAm4zejSKHVRDww9YI2PrFeR0BbnImSgffwWMzjkaFnwKGWSo-7BF2cfZF6GEeiM9bfKHmLc9KZAprRk_YfAYfwcAUwoGc75cyBJLmeQi-mE8rSpMAOD6iQau7--fcVnfO2zREJOdWh0FSclZsIGRYD1Qgvd6U");'></div>
+<div class="flex flex-col justify-center flex-1">
+<p class="text-lg font-bold text-gray-900 dark:text-gray-100">Jordan Smith</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">jordan.smith@email.com</p>
+</div>
+<div class="flex gap-2">
+<button class="flex size-10 shrink-0 items-center justify-center text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="flex size-10 shrink-0 items-center justify-center text-red-500 dark:text-red-400">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="px-2 pb-3 pt-4 text-base font-semibold text-gray-600 dark:text-gray-400">Account</h3>
+<div class="flex flex-col rounded-xl bg-card-light dark:bg-card-dark shadow-xl">
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between border-b border-gray-200/70 dark:border-gray-800/70">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Change Password</p>
+</div>
+<div class="shrink-0 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between border-b border-gray-200/70 dark:border-gray-800/70">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Manage Subscription</p>
+</div>
+<div class="shrink-0 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">fingerprint</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Two-Factor Authentication</p>
+</div>
+<div class="shrink-0 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="px-2 pb-3 pt-4 text-base font-semibold text-gray-600 dark:text-gray-400">Notifications</h3>
+<div class="flex flex-col rounded-xl bg-card-light dark:bg-card-dark shadow-xl">
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between border-b border-gray-200/70 dark:border-gray-800/70">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">notifications</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Push Notifications</p>
+</div>
+<div class="shrink-0">
+<label class="relative inline-flex cursor-pointer items-center">
+<input checked="" class="peer sr-only" type="checkbox" value=""/>
+<div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none dark:border-gray-600 dark:bg-gray-700"></div>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between border-b border-gray-200/70 dark:border-gray-800/70">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Email Notifications</p>
+</div>
+<div class="shrink-0">
+<label class="relative inline-flex cursor-pointer items-center">
+<input class="peer sr-only" type="checkbox" value=""/>
+<div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none dark:border-gray-600 dark:bg-gray-700"></div>
+</label>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">tune</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Notification Preferences</p>
+</div>
+<div class="shrink-0 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="px-2 pb-3 pt-4 text-base font-semibold text-gray-600 dark:text-gray-400">App</h3>
+<div class="flex flex-col rounded-xl bg-card-light dark:bg-card-dark shadow-xl">
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between border-b border-gray-200/70 dark:border-gray-800/70">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">help</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Help &amp; Support</p>
+</div>
+<div class="shrink-0 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between border-b border-gray-200/70 dark:border-gray-800/70">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">shield</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Privacy Policy</p>
+</div>
+<div class="shrink-0 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between border-b border-gray-200/70 dark:border-gray-800/70">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">description</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">Terms of Service</p>
+</div>
+<div class="shrink-0 text-gray-500 dark:text-gray-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 min-h-[56px] justify-between">
+<div class="flex items-center gap-4">
+<div class="text-icon-light dark:text-icon-dark flex size-10 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+<span class="material-symbols-outlined">info</span>
+</div>
+<p class="flex-1 truncate text-base font-normal text-gray-900 dark:text-gray-100">App Version</p>
+</div>
+<div class="shrink-0">
+<p class="text-base text-gray-500 dark:text-gray-400">1.2.3</p>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-4 bg-red-100/80 dark:bg-red-900/40 text-red-600 dark:text-red-400 text-base font-bold shadow-md">
+<span class="truncate">Log Out</span>
+</button>
+</div>
+</main>
+</div>
+</body></html>
