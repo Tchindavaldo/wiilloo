@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/providers/auth_provider.dart';
 import 'stepper_institutional.dart';
 
-class AuthScreenV3 extends StatefulWidget {
+class AuthScreenV3 extends ConsumerStatefulWidget {
   const AuthScreenV3({Key? key}) : super(key: key);
 
   @override
-  State<AuthScreenV3> createState() => _AuthScreenV3State();
+  ConsumerState<AuthScreenV3> createState() => _AuthScreenV3State();
 }
 
-class _AuthScreenV3State extends State<AuthScreenV3>
+class _AuthScreenV3State extends ConsumerState<AuthScreenV3>
     with TickerProviderStateMixin {
   late AnimationController _slideController;
   late AnimationController _fadeController;
@@ -52,9 +54,56 @@ class _AuthScreenV3State extends State<AuthScreenV3>
     super.dispose();
   }
 
-  void _navigateToLogin() {
+  Future<void> _handleGoogleSignIn() async {
     HapticFeedback.selectionClick();
-    _navigateToPresentation();
+
+    // Afficher un indicateur de chargement
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) =>
+          const Center(child: CircularProgressIndicator(color: Colors.white)),
+    );
+
+    try {
+      // Utiliser la méthode d'authentification Google existante
+      final success = await ref
+          .read(currentUserProvider.notifier)
+          .signInWithGoogle();
+
+      // Fermer l'indicateur de chargement
+      if (mounted) Navigator.of(context).pop();
+
+      if (success) {
+        // Connexion réussie, naviguer vers la présentation
+        _navigateToPresentation();
+      } else {
+        // Afficher un message d'erreur
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Échec de la connexion avec Google'),
+              backgroundColor: Colors.red,
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      // Fermer l'indicateur de chargement en cas d'erreur
+      if (mounted) Navigator.of(context).pop();
+
+      // Afficher l'erreur
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
   }
 
   void _navigateToPresentation() {
@@ -294,33 +343,73 @@ class _AuthScreenV3State extends State<AuthScreenV3>
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Google Auth Button
           _buildAuthButton(
             icon: _buildGoogleIcon(),
             text: 'Continuer avec Google',
-            onTap: _navigateToLogin,
+            onTap: _handleGoogleSignIn,
             isPrimary: true,
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
 
           // Apple Auth Button
           _buildAuthButton(
             icon: const Icon(Icons.apple, color: Colors.white, size: 20),
             text: 'Continuer avec Apple',
-            onTap: _navigateToLogin,
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Connexion avec Apple bientôt disponible dans les prochaines mises à jour',
+                  ),
+                  duration: Duration(seconds: 3),
+                  backgroundColor: Color(0xFF06B6D4),
+                ),
+              );
+            },
             isPrimary: false,
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
+
+          // Phone Auth Button
+          _buildAuthButton(
+            icon: const Icon(Icons.phone, color: Colors.white, size: 20),
+            text: 'Connexion via Numéro',
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Connexion par téléphone bientôt disponible dans les prochaines mises à jour',
+                  ),
+                  duration: Duration(seconds: 3),
+                  backgroundColor: Color(0xFF06B6D4),
+                ),
+              );
+            },
+            isPrimary: false,
+          ),
+
+          const SizedBox(height: 10),
 
           // WhatsApp Auth Button
           _buildAuthButton(
             icon: const Icon(Icons.chat, color: Colors.white, size: 20),
             text: 'Connexion via WhatsApp',
-            onTap: _navigateToLogin,
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Connexion par WhatsApp bientôt disponible dans les prochaines mises à jour',
+                  ),
+                  duration: Duration(seconds: 3),
+                  backgroundColor: Color(0xFF06B6D4),
+                ),
+              );
+            },
             isPrimary: false,
           ),
         ],

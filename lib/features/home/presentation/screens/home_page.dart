@@ -344,6 +344,52 @@ class _HomePageState extends ConsumerState<HomePage> {
       );
     }
 
+    // Afficher un message si aucune épreuve disponible
+    if (!isInitialLoading && state.groups.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.inbox_rounded, size: 80, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            Text(
+              'Aucune épreuve disponible',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[700],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Revenez plus tard pour découvrir de nouvelles épreuves',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton.icon(
+              onPressed: () {
+                ref.read(epreuveNotifierProvider.notifier).refreshEpreuves();
+              },
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('Actualiser'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF3B82F6),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     // Convertir les groupes du backend en format pour les widgets
     final backendGroups = state.groups;
 

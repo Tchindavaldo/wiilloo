@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../widgets/stat_card.dart';
 import '../widgets/proof_card.dart';
+import '../widgets/create_type_selection_modal.dart';
+import 'create_proof_request_screen.dart';
+import 'create_proof_screen.dart';
+import 'proof_request_detail_screen.dart';
 
 class ProofsScreen extends StatelessWidget {
   const ProofsScreen({Key? key}) : super(key: key);
@@ -9,6 +13,38 @@ class ProofsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final result = await showModalBottomSheet<String>(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            builder: (context) => const CreateTypeSelectionModal(),
+          );
+          
+          if (result != null && context.mounted) {
+            if (result == 'proof') {
+              // Navigate to Create Proof screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CreateProofScreen(),
+                ),
+              );
+            } else if (result == 'correction') {
+              // Navigate to Create Correction Request screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CreateProofRequestScreen(),
+                ),
+              );
+            }
+          }
+        },
+        backgroundColor: const Color(0xFF005A9C),
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
+      ),
       body: CustomScrollView(
         slivers: [
           // Sticky Header
@@ -133,27 +169,57 @@ class ProofsScreen extends StatelessWidget {
                 childAspectRatio: 1.25,
               ),
               delegate: SliverChildListDelegate([
-                const ProofCard(
+                ProofCard(
                   title: 'Annual Report 2024',
                   type: 'Text Correction',
                   priority: 'High Priority',
-                  priorityColor: Color(0xFFEF4444),
+                  priorityColor: const Color(0xFFEF4444),
                   estimate: '2h',
                   comments: 8,
                   deadline: '1 day left',
-                  deadlineColor: Color(0xFFEF4444),
+                  deadlineColor: const Color(0xFFEF4444),
                   hasImage: true,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProofRequestDetailScreen(
+                          requestId: '#1024',
+                          title: 'Annual Report 2024',
+                          description: 'Text correction needed for the annual report 2024.',
+                          status: 'In Progress',
+                          submittedDate: 'Dec 22, 2023',
+                          assignedAgent: 'Mark Johnson',
+                        ),
+                      ),
+                    );
+                  },
                 ),
-                const ProofCard(
+                ProofCard(
                   title: 'Marketing Brochure Q3',
                   type: 'Image Replacement',
                   priority: 'Medium Priority',
-                  priorityColor: Color(0xFFF59E0B),
+                  priorityColor: const Color(0xFFF59E0B),
                   estimate: '4h',
                   comments: 3,
-                  deadline: '5 days left',
-                  deadlineColor: Color(0xFFF59E0B),
-                  hasImage: true,
+                  deadline: '3 days left',
+                  deadlineColor: const Color(0xFF10B981),
+                  hasImage: false,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProofRequestDetailScreen(
+                          requestId: '#1025',
+                          title: 'Marketing Brochure Q3',
+                          description: 'Image replacement needed for Q3 marketing brochure.',
+                          status: 'New',
+                          submittedDate: 'Dec 23, 2023',
+                          assignedAgent: 'Sarah Day',
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 const ProofCard(
                   title: 'Social Media Graphics',

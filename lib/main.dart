@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:wiilloo/core/config/environment_config.dart';
-// import 'package:wiilloo/features/auth/presentation/screens/auth_screen_v3.dart';
+import 'package:wiilloo/features/navigation/presentation/screens/splash_screen.dart';
 import 'package:wiilloo/features/navigation/presentation/screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase
+  await Firebase.initializeApp();
   
   // Initialize environment configuration
   // Set isProduction to true for production builds
@@ -25,14 +29,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Wiilloo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // Switch between AuthScreenV3 and MainScreen for testing
-      home: const MainScreen(),
-      // home: const AuthScreenV3(),
+      // SplashScreen vérifie si l'utilisateur est connecté
+      home: const SplashScreen(),
     );
   }
 }

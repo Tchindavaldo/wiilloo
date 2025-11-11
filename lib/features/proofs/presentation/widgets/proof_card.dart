@@ -10,6 +10,7 @@ class ProofCard extends StatelessWidget {
   final String deadline;
   final Color deadlineColor;
   final bool hasImage;
+  final VoidCallback? onTap;
 
   const ProofCard({
     Key? key,
@@ -22,18 +23,21 @@ class ProofCard extends StatelessWidget {
     required this.deadline,
     required this.deadlineColor,
     required this.hasImage,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-      ),
-      child: Column(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFE5E7EB)),
+        ),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
@@ -151,6 +155,7 @@ class ProofCard extends StatelessWidget {
             ],
           ),
         ],
+        ),
       ),
     );
   }

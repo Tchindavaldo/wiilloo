@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>New Correction Request</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1173d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "text-light": "#333333",
+                        "text-dark": "#f1f1f1",
+                        "border-light": "#dbe0e6",
+                        "border-dark": "#3a444c",
+                        "input-bg-light": "#ffffff",
+                        "input-bg-dark": "#1a242d",
+                        "placeholder-light": "#617589",
+                        "placeholder-dark": "#9ab0c4",
+                        "secondary-bg-light": "#f0f2f4",
+                        "secondary-bg-dark": "#2c3843",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="font-display">
+    <div
+        class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+      
+       
+        <footer
+            class="fixed bottom-0 left-0 z-10 w-full border-t border-border-light bg-background-light p-4 dark:border-border-dark dark:bg-background-dark">
+            <div class="flex gap-4">
+                <button
+                    class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-secondary-bg-light px-6 text-base font-bold text-text-light shadow-sm transition-all hover:bg-opacity-90 active:scale-95 dark:bg-secondary-bg-dark dark:text-text-dark">
+                    <span class="truncate">Back</span>
+                </button>
+                <button
+                    class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary px-6 text-base font-bold text-white shadow-sm transition-all hover:bg-opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50">
+                    <span class="truncate">Continue</span>
+                </button>
+            </div>
+        </footer>
+        <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div
+                class="flex w-full max-w-xs flex-col items-center gap-4 rounded-xl bg-background-light dark:bg-background-dark p-6 shadow-lg">
+                <div class="relative h-16 w-16">
+                    <div
+                        class="h-16 w-16 animate-spin rounded-full border-4 border-border-light border-t-primary dark:border-border-dark dark:border-t-primary">
+                    </div>
+                    <span
+                        class="material-symbols-outlined absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl text-primary">smartphone</span>
+                </div>
+                <div class="text-center">
+                    <h2 class="text-lg font-bold text-text-light dark:text-text-dark">Initiating Payment Request...</h2>
+                    <p class="mt-1 text-sm text-placeholder-light dark:text-placeholder-dark">Please wait a moment.</p>
+                </div>
+            </div>
+        </div>
+        <div
+            class="absolute inset-0 z-20 hidden flex-col items-center justify-center bg-background-light dark:bg-background-dark p-4 text-center">
+            <span class="material-symbols-outlined text-6xl text-primary">phonelink_ring</span>
+            <h2 class="mt-4 text-2xl font-bold text-text-light dark:text-text-dark">Check your phone!</h2>
+            <p class="mt-2 max-w-sm text-base text-placeholder-light dark:text-placeholder-dark">We've sent a payment
+                request to your phone. Dial <span class="font-bold text-text-light dark:text-text-dark">*126#</span> to
+                complete the transaction.</p>
+            <div class="mt-8 flex flex-col items-center gap-4">
+                <div class="text-4xl font-bold text-primary">01:58</div>
+                <p class="text-sm text-placeholder-light dark:text-placeholder-dark">Didn't receive the request?</p>
+                <button class="font-semibold text-primary">Resend Code</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

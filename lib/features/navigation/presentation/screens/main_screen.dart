@@ -1,19 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../home/presentation/screens/home_page.dart';
 import '../../../proofs/presentation/screens/proofs_screen.dart';
 import '../../../notifications/presentation/screens/notifications_screen.dart';
 import '../../../ai_chat/presentation/screens/ai_chat_screen.dart';
 import '../../../settings/presentation/screens/settings_screen.dart';
+import '../../../../core/providers/auth_provider.dart';
+import '../../../home/presentation/providers/epreuve_providers.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   int _currentIndex = 0;
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    // Connecter Socket.IO avec le userId dès l'arrivée sur MainScreen
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final currentUser = ref.read(currentUserProvider);
+      if (currentUser != null) {
+        final socketService = ref.read(epreuveSocketServiceProvider);
+        if (!socketService.isConnected) {
+          print('🔌 Connexion Socket.IO avec userId: ${currentUser.id}');
+          socketService.connect(userId: currentUser.id);
+        }
+      }
+    });
+  }
 
   // Liste des pages
   final List<Widget> _pages = [

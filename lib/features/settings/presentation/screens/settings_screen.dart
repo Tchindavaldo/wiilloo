@@ -1,21 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/setting_item.dart';
 import '../widgets/notification_toggle_item.dart';
+import '../../../../core/providers/auth_provider.dart';
+import '../../../auth/presentation/screens/auth_screen_v3.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _pushNotifications = true;
   bool _emailNotifications = false;
+  bool _isLoggingOut = false;
+  
+  void _handleLogout() async {
+    if (_isLoggingOut) return;
+    // Afficher une confirmation
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Déconnexion'),
+        content: const Text('Voulez-vous vraiment vous déconnecter ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Déconnexion'),
+          ),
+        ],
+      ),
+    );
+    
+    if (confirm == true && mounted) {
+      setState(() {
+        _isLoggingOut = true;
+      });
+      
+      try {
+        // Déconnexion
+        await ref.read(authServiceProvider).signOut();
+        
+        // Réinitialiser le provider de l'utilisateur
+        ref.invalidate(currentUserProvider);
+        
+        if (mounted) {
+          // Rediriger vers l'écran de connexion
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const AuthScreenV3()),
+            (route) => false,
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erreur lors de la déconnexion: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoggingOut = false;
+          });
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(currentUserProvider);
+    
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Color(0xFF1E3A8A),
@@ -72,22 +138,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Jordan Smith',
-                          style: TextStyle(
+                          currentUser?.displayName ?? 'Utilisateur',
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF111827),
                           ),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          'jordan.smith@email.com',
-                          style: TextStyle(
+                          currentUser?.email ?? currentUser?.phoneNumber ?? '',
+                          style: const TextStyle(
                             fontSize: 14,
                             color: Color(0xFF6B7280),
                           ),
@@ -155,18 +221,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         SettingItem(
                           icon: Icons.lock,
+                          iconColor: const Color(0xFF3B82F6),
                           title: 'Change Password',
                           onTap: () {},
                         ),
                         const Divider(height: 1, color: Color(0xFFF3F4F6)),
                         SettingItem(
                           icon: Icons.credit_card,
+                          iconColor: const Color(0xFF10B981),
                           title: 'Manage Subscription',
                           onTap: () {},
                         ),
                         const Divider(height: 1, color: Color(0xFFF3F4F6)),
                         SettingItem(
                           icon: Icons.fingerprint,
+                          iconColor: const Color(0xFF8B5CF6),
                           title: 'Two-Factor Authentication',
                           onTap: () {},
                         ),
@@ -238,6 +307,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         const Divider(height: 1, color: Color(0xFFF3F4F6)),
                         SettingItem(
                           icon: Icons.tune,
+                          iconColor: const Color(0xFFF59E0B),
                           title: 'Notification Preferences',
                           onTap: () {},
                         ),
@@ -285,18 +355,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         SettingItem(
                           icon: Icons.help,
+                          iconColor: const Color(0xFF06B6D4),
                           title: 'Help & Support',
                           onTap: () {},
                         ),
                         const Divider(height: 1, color: Color(0xFFF3F4F6)),
                         SettingItem(
                           icon: Icons.shield,
+                          iconColor: const Color(0xFFEC4899),
                           title: 'Privacy Policy',
                           onTap: () {},
                         ),
                         const Divider(height: 1, color: Color(0xFFF3F4F6)),
                         SettingItem(
                           icon: Icons.info,
+                          iconColor: const Color(0xFF6366F1),
                           title: 'App Version',
                           onTap: () {},
                         ),
@@ -304,6 +377,71 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+          
+          const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          
+          // Logout Button - Séparé
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: _isLoggingOut ? null : _handleLogout,
+                  borderRadius: BorderRadius.circular(16),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFFEF4444),
+                          const Color(0xFFDC2626),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFEF4444).withOpacity(0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_isLoggingOut)
+                          const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        else
+                          const Icon(
+                            Icons.logout_rounded,
+                            color: Colors.white,
+                            size: 22,
+                          ),
+                        const SizedBox(width: 12),
+                        Text(
+                          _isLoggingOut ? 'Déconnexion...' : 'Se déconnecter',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

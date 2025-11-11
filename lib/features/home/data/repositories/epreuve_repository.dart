@@ -48,6 +48,17 @@ class EpreuveRepository {
             data: socketEvent.data,
           ));
           break;
+        
+        // Ignorer les événements de paiement et de demande (gérés ailleurs)
+        case SocketEvent.paymentInitialized:
+        case SocketEvent.paymentValidated:
+        case SocketEvent.paymentCompleted:
+        case SocketEvent.paymentFailed:
+        case SocketEvent.requestCreationStarted:
+        case SocketEvent.requestCreated:
+        case SocketEvent.requestCreationFailed:
+          // Ces événements sont gérés dans create_proof_request_screen
+          break;
       }
     });
   }

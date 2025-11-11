@@ -4,12 +4,14 @@ class ChatMessage extends StatelessWidget {
   final bool isAi;
   final String message;
   final List<MessageSection>? sections;
+  final List<String>? attachedFiles;
 
   const ChatMessage({
     Key? key,
     required this.isAi,
     required this.message,
     this.sections,
+    this.attachedFiles,
   }) : super(key: key);
 
   @override
@@ -125,6 +127,43 @@ class ChatMessage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
+            // Attached files
+            if (attachedFiles != null && attachedFiles!.isNotEmpty) ...[
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: attachedFiles!.map((fileName) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: const Color(0xFF1173d4).withOpacity(0.3)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.insert_drive_file,
+                          size: 14,
+                          color: Color(0xFF1173d4),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          fileName,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF1173d4),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 8),
+            ],
             Text(
               message,
               style: const TextStyle(

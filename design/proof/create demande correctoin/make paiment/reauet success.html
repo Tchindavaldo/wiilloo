@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Request Created</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+        .material-symbols-outlined.fill-1 {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1173d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "text-light": "#333333",
+                        "text-dark": "#f1f1f1",
+                        "border-light": "#dbe0e6",
+                        "border-dark": "#3a444c",
+                        "input-bg-light": "#ffffff",
+                        "input-bg-dark": "#1a242d",
+                        "placeholder-light": "#617589",
+                        "placeholder-dark": "#9ab0c4",
+                        "secondary-bg-light": "#f0f2f4",
+                        "secondary-bg-dark": "#2c3843",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="font-display">
+    <div
+        class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+        <header
+            class="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between border-b border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark px-4">
+            <div class="w-8"></div>
+            <h1 class="text-lg font-bold text-text-light dark:text-text-dark">Confirmation</h1>
+            <button class="flex h-8 w-8 items-center justify-center text-text-light dark:text-text-dark">
+                <span class="material-symbols-outlined text-2xl">close</span>
+            </button>
+        </header>
+        <main class="flex flex-1 flex-col justify-center pb-24">
+            <div class="flex flex-col items-center gap-6 p-4 text-center">
+                <div class="flex h-24 w-24 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/50">
+                    <span class="material-symbols-outlined text-6xl text-green-600 dark:text-green-400">task_alt</span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <h2 class="text-2xl font-bold text-text-light dark:text-text-dark">Your Request Has Been Created!
+                    </h2>
+                    <p class="text-base text-placeholder-light dark:text-placeholder-dark">You can track its progress on
+                        the dashboard.</p>
+                </div>
+                <div
+                    class="flex w-full max-w-sm flex-col items-center gap-3 rounded-xl border border-border-light bg-input-bg-light p-4 dark:border-border-dark dark:bg-input-bg-dark">
+                    <p class="text-sm font-medium text-placeholder-light dark:text-placeholder-dark">Request ID</p>
+                    <div class="flex items-center gap-2">
+                        <p class="text-lg font-semibold text-text-light dark:text-text-dark">PRC-20240728-001</p>
+                        <button
+                            class="flex items-center justify-center text-placeholder-light transition-colors hover:text-primary dark:text-placeholder-dark dark:hover:text-primary">
+                            <span class="material-symbols-outlined text-xl">content_copy</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer
+            class="fixed bottom-0 left-0 z-10 w-full border-t border-border-light bg-background-light p-4 dark:border-border-dark dark:bg-background-dark">
+            <div class="flex flex-col gap-3">
+                <button
+                    class="flex h-12 w-full cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg bg-primary px-6 text-base font-bold text-white shadow-sm transition-all hover:bg-opacity-90 active:scale-95">
+                    <span class="truncate">View My Request</span>
+                </button>
+                <button
+                    class="flex h-12 w-full cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg bg-secondary-bg-light px-6 text-base font-bold text-text-light shadow-sm transition-all hover:bg-opacity-90 active:scale-95 dark:bg-secondary-bg-dark dark:text-text-dark">
+                    <span class="truncate">Go to Dashboard</span>
+                </button>
+                <button
+                    class="flex h-12 w-full cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg border border-border-light bg-transparent px-6 text-base font-bold text-text-light shadow-sm transition-all hover:bg-secondary-bg-light active:scale-95 dark:border-border-dark dark:text-text-dark dark:hover:bg-secondary-bg-dark">
+                    <span class="material-symbols-outlined text-xl">share</span>
+                    <span class="truncate">Share Request Details</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>

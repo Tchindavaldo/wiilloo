@@ -10,9 +10,17 @@ final epreuveApiServiceProvider = Provider<EpreuveApiService>((ref) {
   return EpreuveApiService();
 });
 
-/// Provider for the Socket.IO service
+/// Provider for the Socket.IO service (singleton)
 final epreuveSocketServiceProvider = Provider<EpreuveSocketService>((ref) {
-  return EpreuveSocketService();
+  final service = EpreuveSocketService();
+  
+  // Garder le service en vie même si plus de listeners
+  ref.onDispose(() {
+    print('🔴 Disposing EpreuveSocketService');
+    service.dispose();
+  });
+  
+  return service;
 });
 
 /// Provider for the repository

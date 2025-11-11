@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>New Correction Request</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1173d4",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "text-light": "#333333",
+                        "text-dark": "#f1f1f1",
+                        "border-light": "#dbe0e6",
+                        "border-dark": "#3a444c",
+                        "input-bg-light": "#ffffff",
+                        "input-bg-dark": "#1a242d",
+                        "placeholder-light": "#617589",
+                        "placeholder-dark": "#9ab0c4",
+                        "secondary-bg-light": "#f0f2f4",
+                        "secondary-bg-dark": "#2c3843",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="font-display">
+    <div
+        class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+        <header
+            class="sticky top-0 z-10 flex h-14 shrink-0 items-center justify-between border-b border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark px-4">
+            <button class="flex items-center justify-center text-text-light dark:text-text-dark">
+                <span class="material-symbols-outlined text-2xl">arrow_back</span>
+            </button>
+            <h1 class="text-lg font-bold text-text-light dark:text-text-dark">New Correction Request</h1>
+            <button class="flex items-center justify-center text-text-light dark:text-text-dark">
+                <span class="material-symbols-outlined text-2xl">close</span>
+            </button>
+        </header>
+        <div
+            class="sticky top-14 z-10 border-b border-border-light bg-background-light px-4 py-3 dark:border-border-dark dark:bg-background-dark">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-sm font-bold text-white">
+                        1</div>
+                    <span class="text-sm font-semibold text-primary">Details</span>
+                </div>
+                <div class="h-0.5 flex-1 bg-border-light dark:bg-border-dark mx-2"></div>
+                <div class="flex items-center gap-2">
+                    <div
+                        class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-border-light bg-transparent text-sm font-bold text-text-light dark:border-border-dark dark:text-text-dark">
+                        2</div>
+                    <span class="text-sm font-medium text-placeholder-light dark:text-placeholder-dark">Payment</span>
+                </div>
+                <div class="h-0.5 flex-1 bg-border-light dark:bg-border-dark mx-2"></div>
+                <div class="flex items-center gap-2">
+                    <div
+                        class="flex h-6 w-6 items-center justify-center rounded-full border-2 border-border-light bg-transparent text-sm font-bold text-text-light dark:border-border-dark dark:text-text-dark">
+                        3</div>
+                    <span class="text-sm font-medium text-placeholder-light dark:text-placeholder-dark">Confirm</span>
+                </div>
+            </div>
+        </div>
+        <main class="flex-1 pb-24">
+            <div class="flex flex-col gap-4 p-4">
+                <label class="flex flex-col">
+                    <p class="pb-2 text-base font-medium text-text-light dark:text-text-dark">Request Title <span
+                            class="text-red-500">*</span></p>
+                    <input
+                        class="form-input flex h-14 min-w-0 flex-1 resize-none overflow-hidden rounded-lg border border-border-light bg-input-bg-light p-4 text-base font-normal leading-normal text-text-light placeholder:text-placeholder-light focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-border-dark dark:bg-input-bg-dark dark:text-text-dark dark:placeholder:text-placeholder-dark dark:focus:border-primary"
+                        placeholder="Enter a brief summary of the issue" value="" />
+                </label>
+                <label class="flex flex-col">
+                    <p class="pb-2 text-base font-medium text-text-light dark:text-text-dark">Description</p>
+                    <textarea
+                        class="form-input flex min-h-36 min-w-0 flex-1 resize-y overflow-hidden rounded-lg border border-border-light bg-input-bg-light p-4 text-base font-normal leading-normal text-text-light placeholder:text-placeholder-light focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-border-dark dark:bg-input-bg-dark dark:text-text-dark dark:placeholder:text-placeholder-dark dark:focus:border-primary"
+                        placeholder="Provide a detailed description of the correction needed."></textarea>
+                </label>
+               
+                <label class="flex flex-col">
+                    <p class="pb-2 text-base font-medium text-text-light dark:text-text-dark">Due Date</p>
+                    <div class="relative">
+                        <input
+                            class="form-input flex h-14 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border border-border-light bg-input-bg-light p-4 pr-12 text-base font-normal leading-normal text-text-light placeholder:text-placeholder-light focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-border-dark dark:bg-input-bg-dark dark:text-text-dark dark:placeholder:text-placeholder-dark dark:focus:border-primary"
+                            placeholder="Select a date" type="text" value="2024-07-28" />
+                        <span
+                            class="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-placeholder-light dark:text-placeholder-dark">calendar_today</span>
+                    </div>
+                </label>
+                <div class="flex flex-col">
+                    <p class="pb-2 text-base font-medium text-text-light dark:text-text-dark">Priority</p>
+                    <div class="grid grid-cols-3 gap-2 rounded-lg bg-secondary-bg-light p-1 dark:bg-secondary-bg-dark">
+                        <button
+                            class="flex items-center justify-center rounded-md py-2 text-sm font-semibold text-text-light dark:text-text-dark">Low</button>
+                        <button
+                            class="flex items-center justify-center rounded-md bg-primary py-2 text-sm font-semibold text-white">Medium</button>
+                        <button
+                            class="flex items-center justify-center rounded-md py-2 text-sm font-semibold text-text-light dark:text-text-dark">High</button>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden flex-col gap-6 p-4">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
+                            1</div>
+                        <span class="text-sm font-semibold text-primary">Method</span>
+                    </div>
+                    <div class="h-0.5 flex-1 bg-border-light dark:bg-border-dark"></div>
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="flex h-5 w-5 items-center justify-center rounded-full border-2 border-border-light bg-transparent text-xs font-bold text-text-light dark:border-border-dark dark:text-text-dark">
+                            2</div>
+                        <span
+                            class="text-sm font-medium text-placeholder-light dark:text-placeholder-dark">Details</span>
+                    </div>
+                    <div class="h-0.5 flex-1 bg-border-light dark:bg-border-dark"></div>
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="flex h-5 w-5 items-center justify-center rounded-full border-2 border-border-light bg-transparent text-xs font-bold text-text-light dark:border-border-dark dark:text-text-dark">
+                            3</div>
+                        <span
+                            class="text-sm font-medium text-placeholder-light dark:text-placeholder-dark">Confirm</span>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <h4 class="text-base font-medium text-text-light dark:text-text-dark">Select Payment Method</h4>
+                    <button
+                        class="flex w-full items-center gap-4 rounded-lg border-2 border-primary bg-input-bg-light p-4 dark:bg-input-bg-dark">
+                        <span class="material-symbols-outlined text-primary">credit_card</span>
+                        <span class="flex-1 text-left font-semibold text-text-light dark:text-text-dark">Credit
+                            Card</span>
+                        <div
+                            class="h-5 w-5 rounded-full border-2 border-primary bg-primary ring-2 ring-white ring-offset-2 ring-offset-primary">
+                        </div>
+                    </button>
+                    <button
+                        class="flex w-full items-center gap-4 rounded-lg border border-border-light bg-input-bg-light p-4 dark:border-border-dark dark:bg-input-bg-dark">
+                        <span class="material-symbols-outlined text-text-light dark:text-text-dark">smartphone</span>
+                        <span class="flex-1 text-left font-semibold text-text-light dark:text-text-dark">Mobile
+                            Money</span>
+                        <div class="h-5 w-5 rounded-full border border-border-light"></div>
+                    </button>
+                    <button
+                        class="flex w-full items-center gap-4 rounded-lg border border-border-light bg-input-bg-light p-4 dark:border-border-dark dark:bg-input-bg-dark">
+                        <span class="material-symbols-outlined text-text-light dark:text-text-dark">payments</span>
+                        <span class="flex-1 text-left font-semibold text-text-light dark:text-text-dark">Orange
+                            Money</span>
+                        <div class="h-5 w-5 rounded-full border border-border-light"></div>
+                    </button>
+                </div>
+                <div class="hidden flex-col gap-4">
+                    <label class="flex flex-col">
+                        <p class="pb-2 text-base font-medium text-text-light dark:text-text-dark">Phone Number</p>
+                        <input
+                            class="form-input flex h-14 min-w-0 flex-1 resize-none overflow-hidden rounded-lg border border-border-light bg-input-bg-light p-4 text-base font-normal leading-normal text-text-light placeholder:text-placeholder-light focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-border-dark dark:bg-input-bg-dark dark:text-text-dark dark:placeholder:text-placeholder-dark dark:focus:border-primary"
+                            placeholder="Enter your phone number" type="tel" />
+                    </label>
+                    <div class="rounded-lg bg-secondary-bg-light p-4 dark:bg-secondary-bg-dark">
+                        <h5 class="font-semibold text-text-light dark:text-text-dark">Instructions</h5>
+                        <p class="mt-2 text-sm text-text-light dark:text-text-dark">1. You will receive a payment prompt
+                            on your phone.</p>
+                        <p class="mt-1 text-sm text-text-light dark:text-text-dark">2. Alternatively, dial <span
+                                class="font-bold">*126#</span> and follow the on-screen instructions to authorize the
+                            payment.</p>
+                        <p class="mt-1 text-sm text-text-light dark:text-text-dark">3. Enter your PIN to complete the
+                            transaction.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <label class="flex flex-col">
+                        <p class="pb-2 text-base font-medium text-text-light dark:text-text-dark">Card Number</p>
+                        <input
+                            class="form-input flex h-14 min-w-0 flex-1 resize-none overflow-hidden rounded-lg border border-border-light bg-input-bg-light p-4 text-base font-normal leading-normal text-text-light placeholder:text-placeholder-light focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-border-dark dark:bg-input-bg-dark dark:text-text-dark dark:placeholder:text-placeholder-dark dark:focus:border-primary"
+                            placeholder="**** **** **** ****" />
+                    </label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="flex flex-col">
+                            <p class="pb-2 text-base font-medium text-text-light dark:text-text-dark">Expiry Date</p>
+                            <input
+                                class="form-input flex h-14 min-w-0 flex-1 resize-none overflow-hidden rounded-lg border border-border-light bg-input-bg-light p-4 text-base font-normal leading-normal text-text-light placeholder:text-placeholder-light focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-border-dark dark:bg-input-bg-dark dark:text-text-dark dark:placeholder:text-placeholder-dark dark:focus:border-primary"
+                                placeholder="MM/YY" />
+                        </label>
+                        <label class="flex flex-col">
+                            <p class="pb-2 text-base font-medium text-text-light dark:text-text-dark">CVV</p>
+                            <input
+                                class="form-input flex h-14 min-w-0 flex-1 resize-none overflow-hidden rounded-lg border border-border-light bg-input-bg-light p-4 text-base font-normal leading-normal text-text-light placeholder:text-placeholder-light focus:border-primary focus:outline-0 focus:ring-2 focus:ring-primary/20 dark:border-border-dark dark:bg-input-bg-dark dark:text-text-dark dark:placeholder:text-placeholder-dark dark:focus:border-primary"
+                                placeholder="***" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden h-full flex-col items-center justify-center gap-6 p-4 text-center">
+                <div class="flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/50">
+                    <span class="material-symbols-outlined text-5xl text-green-600 dark:text-green-400">task_alt</span>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <h2 class="text-2xl font-bold text-text-light dark:text-text-dark">Request Submitted!</h2>
+                    <p class="text-base text-placeholder-light dark:text-placeholder-dark">Your correction request has
+                        been successfully submitted. You can track its progress in the 'My Requests' section.</p>
+                </div>
+                <div class="w-full max-w-xs">
+                    <button
+                        class="flex h-12 w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-secondary-bg-light px-6 text-base font-bold text-text-light shadow-sm transition-all hover:bg-opacity-90 active:scale-95 dark:bg-secondary-bg-dark dark:text-text-dark">
+                        <span class="truncate">View My Requests</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+        <footer
+            class="fixed bottom-0 left-0 z-10 w-full border-t border-border-light bg-background-light p-4 dark:border-border-dark dark:bg-background-dark">
+            <div class="flex gap-4">
+                <button
+                    class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-secondary-bg-light px-6 text-base font-bold text-text-light shadow-sm transition-all hover:bg-opacity-90 active:scale-95 dark:bg-secondary-bg-dark dark:text-text-dark">
+                    <span class="truncate">Back</span>
+                </button>
+                <button
+                    class="flex h-12 flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary px-6 text-base font-bold text-white shadow-sm transition-all hover:bg-opacity-90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50">
+                    <span class="truncate">Continue</span>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>
