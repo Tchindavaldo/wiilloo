@@ -75,9 +75,17 @@ class EpreuveNotifier extends StateNotifier<EpreuveState> {
         );
       }
     } catch (e) {
+      // Détecter les erreurs de connexion
+      String errorMessage = e.toString();
+      if (errorMessage.contains('SocketException') || 
+          errorMessage.contains('Failed host lookup') ||
+          errorMessage.contains('Network is unreachable')) {
+        errorMessage = 'Problème de connexion. Vérifiez votre connexion internet.';
+      }
+      
       state = state.copyWith(
         isLoading: false,
-        error: e.toString(),
+        error: errorMessage,
       );
     }
   }
