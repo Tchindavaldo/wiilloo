@@ -189,16 +189,21 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(aiChatNotifierProvider);
     final messages = state.messages;
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
+    return GestureDetector(
+      onTap: () {
+        // Fermer le clavier quand on clique en dehors du TextField
+        FocusScope.of(context).unfocus();
+      },
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: Stack(
           children: [
             // Main Chat Area
             Column(
@@ -530,6 +535,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                 ],
               ),
           ],
+        ),
         ),
       ),
     );

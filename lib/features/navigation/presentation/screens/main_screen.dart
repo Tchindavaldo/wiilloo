@@ -28,7 +28,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       if (currentUser != null) {
         final socketService = ref.read(epreuveSocketServiceProvider);
         if (!socketService.isConnected) {
-          print('🔌 Connexion Socket.IO avec userId: ${currentUser.id}');
           socketService.connect(userId: currentUser.id);
         }
       }
