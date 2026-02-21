@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "488172887901",
+    "project_id": "willoo",
+    "storage_bucket": "willoo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488172887901:android:5f1cf94f3db5fabd8d52b4",
+        "android_client_info": {
+          "package_name": "com.example.wiilloo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_yETmAzb4sJwxd2HW-L0NHaFjxAmaaFY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
